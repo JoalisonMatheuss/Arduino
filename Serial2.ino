@@ -1,30 +1,46 @@
 
-int led = LED_BUILTIN;
+
+int ledPin = LED_BUILTIN;
+
 void setup() {
   // put your setup code here, to run once:
 
   Serial.begin(9600);
-
-  pinMode(led, OUTPUT);
+  pinMode(ledPin, OUTPUT);
   
 }
 
-void loop() {
-  // put your main code here, to run repeatedly:
-
+//Função que vai ler uma string da Serial e retorna
+String lerString(){
+  String textoRecebido = "";
   char caracter;
 
-  caracter = Serial.read();
+  while(Serial.available()>0){
 
-   if (caracter == 'a'){
-     Serial.println("Ligou o Led");
-     digitalWrite(led, HIGH);
-   }
-   else{
-     if (caracter == 'b'){
-       Serial.println("Desligou o Led");
-       digitalWrite(led, LOW);
-     }
-   }
-   delay(100);
+    caracter = Serial.read();
+
+    if (caracter != '\n'){
+      textoRecebido.concat(caracter);
+    }
+    delay(10);
+  }
+  Serial.print("Recebido: ");
+  Serial.println(textoRecebido);
+
+  return textoRecebido;
+}
+
+void loop() {
+  if (Serial.available() > 0){
+
+    String recebido = lerString();
+
+    if(recebido == "acender"){
+      digitalWrite(ledPin, HIGH);
+    }
+
+    if(recebido == "desligar"){
+      digitalWrite(ledPin, LOW);
+    }
+  }
 }
