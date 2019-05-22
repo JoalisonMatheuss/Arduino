@@ -1,5 +1,4 @@
 
-
 int ledPin = LED_BUILTIN;
 
 void setup() {
@@ -19,7 +18,7 @@ String lerString(){
 
     caracter = Serial.read();
 
-    if (caracter != '\n'){
+    if (caracter != '\n' && caracter != ' '){
       textoRecebido.concat(caracter);
     }
     delay(10);
