@@ -1,4 +1,4 @@
-import numpy as np
+iimport numpy as np
 import cv2
 import glob
 
@@ -15,26 +15,34 @@ objp[:,:2] = np.mgrid[0:7,0:6].T.reshape(-1,2)
 objpoints = [] # 3d point in real world space
 imgpoints = [] # 2d points in image plane.
 
-cap = cv2.VideoCapture('*.mkv')
-video = glob.glob('*.mkv')
 
-for fname in video:
-  ret, frame = cap.read() #Carrega um video de um arquivo
-  gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY) #Converte um video de um espaço de cor para outro 
-
+cap = cv2.VideoCapture("/home/joalison/Documentos/workspace/my_video-2.mkv")
+  
+while(True):
+      
+    ret, frame = cap.read()
+ 
+    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+ 
+    cv2.imshow('video gray', gray)
+    cv2.imshow('video original', frame)
+      
+    if cv2.waitKey(1) == 27:
+        break
   # Find the chess board corners
-  ret, corners = cv2.findChessboardCorners(gray, (7,6), None)
+    ret, corners = cv2.findChessboardCorners(gray, (7,6), None)
 
   # If found, add object points, image points (after refining them)
-  if ret == True:
-    objpoints.append(objp)
-    corners2 = cv2.cornerSubPix(gray, corners, (11,11), (-1,-1), criteria) #Refina os locais dos cantos
-    imgpoints.append(corners2)
+    if ret == True:
+       objpoints.append(objp)
+       corners2 = cv2.cornerSubPix(gray, corners, (11,11), (-1,-1), criteria) #Refina os locais dos cantos
+       imgpoints.append(corners2)
     # Draw and display the corners
-    cap = cv2.drawChessboardCorners(cap, (7,6), corners2,ret)
-    cv2.imshow('cap',cap) #Exibe textura OPenGL 2D na janela especificada
-    cv2.waitKey(500) #Aguarda por uma tecla pressionada
+       cap = cv2.drawChessboardCorners(cap, (7,6), corners2,ret)
+       cv2.imshow('img',cap) #Exibe textura OPenGL 2D na janela especificada
+       cv2.waitKey(500) #Aguarda por uma tecla pressionada
 
+cap.release()
 cv2.destroyAllWindows() #Destroi todas as janelas do HighGUI
 
 
@@ -45,8 +53,7 @@ ret, mtx, dist, rvecs, tvecs = cv2.calibrateCamera(objpoints, imgpoints, gray.sh
 
 #-------------------------------------Undistortion--------------------------------------------------
 
-cap  =  cv2 . VideoCapture ( '/home/joalison/Documentos/workspace/my_video-1.mkv' ) #Carrega uma imagem de um arquivo
-
+cap = cv2.VideoCapture('/home/joalison/Documentos/workspace/my_video-2.mkv') #Carrega uma imagem de um arquivo
 h,  w = cap.shape[:2]
 newcameramtx, roi = cv2.getOptimalNewCameraMatrix(mtx, dist, (w,h), 1, (w,h)) #Retorna a nova matriz da câmera com base no parâmetro de escala livre
 #----------------------------------Usadondo o unsdistort-------------------------------------------- 
@@ -57,7 +64,7 @@ dst = cv2.undistort(cap, mtx, dist, None, newcameramtx) #Transfomra uma imagem p
 # crop the image
 x,y,w,h = roi
 dst = dst[y:y+h, x:x+w]
-cv2.imwrite('calibresult.png',dst) #Salva uma imagem em um arquivo especificado 
+cv2.imwrite('calibresult.mkv',dst) #Salva uma imagem em um arquivo especificado 
 
 #----------------------------------Usando o remapeamento--------------------------------------------
 
@@ -68,7 +75,7 @@ dst = cv2.remap(cap, mapx, mapy, cv2.INTER_LINEAR) #Aplica um atrnasformação g
 # crop the image
 x,y,w,h = roi
 dst = dst[y:y+h, x:x+w]
-cv2.imwrite('calibresult.png',dst) #Salva uma imagem em um arquivo especificado
+cv2.imwrite('calibresult.mkv',dst) #Salva uma imagem em um arquivo especificado
 a = np.array(newcameramtx)
 print(newcameramtx)
 
@@ -80,3 +87,4 @@ for i in list(range(len(objpoints))):
     error = cv2.norm(imgpoints[i], imgpoints2, cv2.NORM_L2)/len(imgpoints2) #Projetos 3D aponta para um plano de imagem
     mean_error += error
 print( "total error: {}".format(mean_error/len(objpoints)) )
+
