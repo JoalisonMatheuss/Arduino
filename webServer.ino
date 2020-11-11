@@ -45,27 +45,27 @@ void loop() {
   Serial.println(req);
   client.flush();
 
-  if (req.indexOf("LEDon") != -1){
+  if (req.indexOf("LED0on") != -1){
     digitalWrite(ledR, HIGH);
     statusLED0 = HIGH;
   }
-  else if (req.indexOf("LEDoff") != -1){
+  else if (req.indexOf("LED0off") != -1){
     digitalWrite(ledR, LOW);
     statusLED0 = LOW;
   }
-  if (req.indexOf("LEDon") != -1){
+  else if (req.indexOf("LED1on") != -1){
     digitalWrite(ledY, HIGH);
     statusLED1 = HIGH;
   }
-  else if (req.indexOf("LEDoff") != -1){
+  else if (req.indexOf("LED1off") != -1){
     digitalWrite(ledY, LOW);
     statusLED1 = LOW;
   }
-  if (req.indexOf("LEDon") != -1){
+  else if (req.indexOf("LED2on") != -1){
     digitalWrite(ledG, HIGH);
     statusLED2 = HIGH;
   }
-  else if (req.indexOf("LEDoff") != -1){
+  else if (req.indexOf("LED2off") != -1){
     digitalWrite(ledG, LOW);
     statusLED2 = LOW;
   }
@@ -78,40 +78,47 @@ void loop() {
   client.println("<head>");
   client.println("<title>Acendendo Lampadas</title>");
   client.println("<meta charset=\"UTF-8\" >");
-  client.println("<style>  </style>");
+  client.println("<style> body{font-size: 20px; font-family: Arial, Helvetica, sans-serif; color: #000000;} section #banner {display: flex; justify-content: center;} div .container {display: flex; justify-content: space-between; width: 100%;} div .leds {height: 210px; display: flex;} .led1, .led2, .led3 {flex: 1; color: #000000; font-weight: bold; padding: 50px;} div .led1 {background-color: #3bc93b;} div .led2 {background-color: #ffee00;} div .led3 {background-color: #FF0000;} button {border: 3px solid #CCCCCC; border-radius: 5px; font-size: 20px; background-color: #CCCCCC; padding: 10px; border: none; border-radius: 10px; cursor: pointer;} button:hover {box-shadow: 5px 5px 5px #424040;} </style>");
   client.println("");
   client.println("</head>");
   client.println("<body>");
-  client.println("<div class='led'>");
+  client.println("<section id=\"banner\">");
+  client.println("<div class=\"container\">");
+  client.println("<div class=\"leds\">");
+  client.println("<div class=\"led\">");
 
   if (!statusLED0){
-    client.println("<p> LED VERMELHO <a href=\"LEDon\"> <button>LIGAR</button> </p>");
+    client.println("<p> LED VERMELHO <a href=\"LED0on\"> <button>LIGAR</button></a> </p>");
   }
   else {
-    client.println("<p> LED VERMELHO <a href=\"LEDoff\"> <button>DESLIGAR</button> </p>");
+    client.println("<p> LED VERMELHO <a href=\"LED0off\"> <button>DESLIGAR</button></a> </p>");
   }
 
-  client.println("/<div>");
-  client.println("<div class='led'>");
+  client.println("</div>");
+  client.println("<div class=\"led\">");
   
   if (!statusLED1){
-    client.println("<p> LED AMARELO <a href=\"LEDon\"> <button>LIGAR</button> </p>");
+    client.println("<p> LED AMARELO <a href=\"LED1on\"> <button>LIGAR</button></a> </p>");
   }
   else {
-    client.println("<p> LED AMARELO <a href=\"LEDoff\"> <button>DESLIGAR</button> </p>");
+    client.println("<p> LED AMARELO <a href=\"LED1off\"> <button>DESLIGAR</button></a> </p>");
   }
   
-  client.println("/<div>");
-  client.println("<div class='led'>");
+  client.println("</div>");
+  client.println("<div class=\"led\">");
 
   if (!statusLED2){
-    client.println("<p> LED VERDE <a href=\"LEDon\"> <button>LIGAR</button> </p>");
+    client.println("<p> LED VERDE <a href=\"LED2on\"> <button>LIGAR</button></a> </p>");
   }
   else {
-    client.println("<p> LED VERDE <a href=\"LEDoff\"> <button>DESLIGAR</button> </p>");
+    client.println("<p> LED VERDE <a href=\"LED2off\"> <button>DESLIGAR</button></a> </p>");
   }
   
-  client.println("/<div>");
+  client.println("</div>");
+  
+  client.println("</div>");
+  client.println("</div>");
+  client.println("<section>");
   client.println("</body>");
   client.println("</html>");
   
